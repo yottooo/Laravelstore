@@ -1,0 +1,27 @@
+.ui-widget-header,.ui-state-default, ui-button {
+   background:white;
+   border: 1px solid #b9cd6d;
+   color: #FFFFFF;
+   font-weight: bold;
+}
+
+
+
+
+.ui-widget-content {
+    outline: none;
+}
+
+.ui-front { z-index: 1000 !important; }
+
+#dialogWrapper {
+        position: fixed;
+        width: 100%;
+        /* relative unit that takes up full width */
+        height: 100%;
+        /* relative unit that takes up full height */
+        background-color: rgba(0, 0, 0, 0.8);
+        /* adjust last value as needed */
+        z-index: 1000;
+        /* makes this stay on top of all other elements that are not position: static */
+    }
