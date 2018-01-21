@@ -32,8 +32,9 @@ namespace eval ::qa {
             <div class='col-6 col-lg-4'>
                 <h2>@p;title@</h2>
                 <p>@p;description@</p>
-                <p>Tags:@p;tags@</p>
-                <p>Rating:<button class="rate" >+1</button>@p;rating@</p>
+                <p><span class="label label-primary">@p;tags@</span></p>
+                <p>Rating:<button class="rate" id='@p._id@'>+1</button>
+                <%= [expr [join [ns_quotehtml [get_value2 p rating]]  +]]%></p>
                 <a class="Posting" id='@p._id@'>See Content</a>
             </div><!--/span-->
           </FOREACH>

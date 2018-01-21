@@ -27,7 +27,7 @@ namespace eval ::qa {
     #
     $result template set {
       <div id="sidecanvas" >
-        <div class="col-6 col-md-3 sidebar-offcanvas" id="sidebar">
+        <div class="col-12 sidebar-offcanvas" id="sidebar">
         <FOREACH var='p' in=':posting' type='list'>
           @p;obj@
         </FOREACH>

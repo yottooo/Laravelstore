@@ -14,6 +14,6 @@ namespace eval ::qa {
     $p save
     ns_return 200 text/html "Registered user [ns_queryget username]!"
   } else {
-    ns_return 200 text/html "The username [ns_queryget username] already exists!"
+    ns_returnerror 404 "The username [ns_queryget username] already exists!"
   }
 }

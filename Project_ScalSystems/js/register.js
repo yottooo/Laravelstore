@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+$(".registerUser").hide();
   var dialog, form,
 
   // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
@@ -58,29 +58,9 @@ function checkRegexp( o, regexp, n ) {
           "<td>" + email.val() + "</td>" +
           "<td>" + password.val() + "</td>" +
         "</tr>" );
-        dialog.dialog( "close" );
       }
       return valid;
   }
-
-  $( "#registerUser" ).dialog({
-                autoOpen: false,
-                height: 500,
-                width: 400,
-                modal: true,
-
-                open: function() {
-                $("#dialogWrapper").show();
-                },
-                close: function() {
-                    $("#dialogWrapper").hide();
-                },
-                buttons: {
-                				Cancel: function() {
-                					$( "#registerUser" ).dialog( "close" );
-                				}
-            			   }
-           });
 
    // this is the id of the form
    $("#formLogin").submit(function(e) {
@@ -91,13 +71,19 @@ function checkRegexp( o, regexp, n ) {
              url: "tcl/user.tcl",
              data: $("#formLogin").serialize(), // serializes the form's elements.
              success: function(data)
-             {
+             {    console.log(data)
                   $('#sidecanvas').html(data); // show response from the php script.
+             },error: function( error ){
+                 alert("Unable to login! Please check username and password!");
+                 console.log('the page was NOT loaded', error);
+             },
+
+             complete: function( xhr, status ) {
+               console.log('The request is complete!');
              }
            });
 
        e.preventDefault(); // avoid to execute the actual submit of the form.
-       $( "#registerUser" ).dialog( "close" );
    });
 
    function loginUser(username, password){
@@ -115,29 +101,30 @@ function checkRegexp( o, regexp, n ) {
 
 
    // this is the id of the form
-   $("#registerUser").submit(function(e) {
+   $("#registerUser").submit('.registerUser',function(e) {
        $.ajax({
               type: "POST",
               url: "tcl/register.tcl",
               data: $("#formID").serialize(), // serializes the form's elements.
               success: function(data)
-              {
-                  alert(data); // show response from the php script.
-                  loginUser( $('#username').val(), $('#password').val())
+              { console.log('the page was NOasdT loaded', data);
+                  loginUser( $("#formID #username").val(), $("#formID #password").val());
+              },
+              error: function( error ){
+                  alert("Error!")
+                  console.log('the page was NOT loaded', error);
+              },
+
+              complete: function( xhr, status ) {
+                console.log('The request is complete!');
               }
             });
-
-
        e.preventDefault(); // avoid to execute the actual submit of the form.
-       $( "#registerUser" ).dialog( "close" );
    });
 
-
-  $("#registerUser").siblings('div.ui-dialog-titlebar').remove();
-
    $( "#openRegisterUser" ).button().click(function() {
-      $("#dialogWrapper").show();
-      $( "#registerUser" ).dialog( "open" );
+      $(".registerUser").show();
+      $('#content').html("");
    });
    $("#dialogWrapper").hide();
 

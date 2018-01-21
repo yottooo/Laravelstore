@@ -12,11 +12,12 @@ $(document).ready(function(){
     var PostingID = $(this).attr('id');
     loadPosting(PostingID)
   });
+
   //When you click the button
   $('body').on('click','.rate', function(e){
    e.preventDefault( );
    var PostingID = $(this).attr('id');
-   loadPosting(PostingID)
+   changeRating(PostingID)
  });
 
    $.ajax({
@@ -37,24 +38,43 @@ $(document).ready(function(){
      }
    });
 
-  function loadPosting(id){
-       $.ajax({
-         url: 'tcl/loadPosting.tcl?id='+id,
-         type: "GET",
-         success: function( response ){
-           $('#content').html(response);
-           console.log('the page was loaded', response);
-         },
-         error: function( error ){
-             $('#content').html('The page was NOT loaded');
-             console.log('the page was NOT loaded', error);
-         },
+   function changeRating(id){
+     $.ajax({
+       url: 'tcl/rating.tcl?id='+id,
+       type: "GET",
+       success: function( response ){
+         $('rate').html(response);
+         console.log('the page was loaded', response);
+       },
+       error: function( error ){
+           $('#content').html('The page was NOT loaded');
+           console.log('the page was NOT loaded', error);
+       },
 
-         complete: function( xhr, status ) {
-           console.log('The request is complete!');
-         }
-       });
-   };
+       complete: function( xhr, status ) {
+         console.log('The request is complete!');
+       }
+     });
+
+     $.ajax({
+       url: 'tcl/content.tcl',
+       type: "GET",
+       dataType : 'text',
+       success: function( response ){
+         $('#content').html(response);
+         console.log('the page was loaded', response);
+       },
+       error: function( error ){
+           $('#content').html('The page was NOT loaded');
+           console.log('the page was NOT loaded', error);
+       },
+
+       complete: function( xhr, status ) {
+         console.log('The request is complete!');
+       }
+     });
+   }
+
    function loadPosting(id){
         $.ajax({
           url: 'tcl/loadPosting.tcl?id='+id,

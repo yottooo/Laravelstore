@@ -19,8 +19,12 @@ namespace eval ::qa {
     #
     set result [nx::Object new {
       set userName [ns_queryget username]
+      set pwd [ns_queryget password]
       puts $userName
-      set :user [User find all -cond [list username = $userName] ]
+      set :user [User find all -cond [list username = $userName password = $pwd] ]
+      if {${:user} eq ""} {
+        ns_returnerror 404 ""
+      }
     }]
     #
     # Set template for result, iterating over the postings with FOREACH
