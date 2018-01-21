@@ -45,7 +45,7 @@ namespace eval qa {
     :property ts:required
     :property -incremental comments:embedded,type=::qa::Comment,0..n
     :property -incremental {tags:0..n ""}
-    :property -incremental {rating:0..n "0"}
+    :property -incremental {rating:0..n 0}
   }
 
   nx::mongo::Class create User {
@@ -110,7 +110,11 @@ namespace eval qa {
   <div class="panel panel-default">
     <!-- Default panel contents -->
       <div class="panel-body">
-        <h3> @:title@ </h3><span class="label label-primary"> @:tags@ </span>
+        <h3> @:title@ </h3>
+        <FOREACH var='t' in=':tags' type='list'>
+            <span class="label label-primary">@t@</span>
+        </FOREACH>
+
         <h4>@:description@</h4>
         <small class="text-muted"><b>@:author@</b> @:ts@</small>
         <hr>

@@ -41,7 +41,22 @@
     <main role="main" class="container ">
           <div class="row row-offcanvas row-offcanvas-right">
             <div class="col-12 col-md-9">
+              <div id="registerUser"  class="registerUser">
+                <h2>Register</h2>
+                <hr>
+                <form id="formID">
+                    <label for="username">Username</label><br/>
+                    <input type="text" name="username" id="username" value="Username" class="inputfield"><br/>
+                    <label for="email">Email</label><br/>
+                    <input type="text" name="email" id="email" value="Max.Muster@test.com" class="inputfield"><br/>
+                    <label for="password">Password</label><br/>
+                    <input type="password" name="password" id="password" value="xxxxxxx" class="inputfield">
+                    <br/><br/>
+                    <input type="submit">
+                </form>
+              </div>
               <div id="content">
+
             </div><!--/span-->
           </div>
 
@@ -54,11 +69,11 @@
                             <form id="formLogin">
                              <div class="form-group">
                                <label for="user">Email address:</label>
-                               <input type="text" name="user" class="form-control" id="username">
+                               <input type="text" name="username" class="form-control" id="user">
                              </div>
                              <div class="form-group">
                                <label for="pwd">Password:</label>
-                               <input type="password" class="form-control" id="pwd">
+                               <input type="password" class="form-control" id="password">
                              </div>
                              <div class="checkbox">
                                <label><input type="checkbox"> Remember me</label>
@@ -67,21 +82,6 @@
                           </form>
                           <br/>
                           <p id="openRegisterUser">Click here to register!</p>
-
-                            <div id="registerUser"  class="well well-lg">
-                              <h2>Register</h2>
-                              <hr>
-                              <form id="formID">
-                                  <label for="username">Username</label><br/>
-                                  <input type="text" name="username" id="username" value="Username" class="inputfield"><br/>
-                                  <label for="email">Email</label><br/>
-                                  <input type="text" name="email" id="email" value="Max.Muster@test.com" class="inputfield"><br/>
-                                  <label for="password">Password</label><br/>
-                                  <input type="password" name="password" id="password" value="xxxxxxx" class="inputfield"><br/>
-                                  <!-- Allow form submission with keyboard without duplicating the dialog button -->
-                                  <input type="submit">
-                              </form>
-                            </div>
                           </div><!--/span-->
               </div>
           </div>
