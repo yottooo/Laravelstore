@@ -33,19 +33,18 @@ namespace eval bi {
   #
   nx::mongo::Class create Comment {
     :property author:required
-    :property comment:required
+    :property comment:required 
     :property -incremental replies:embedded,type=::bi::Comment,0..n
   }
-
+    
   nx::mongo::Class create Posting {
     :index tags
     :property title:required
     :property author:required
-    :property text:required
+	:property description:required
     :property ts:required
     :property -incremental comments:embedded,type=::bi::Comment,0..n
     :property -incremental {tags:0..n ""}
-    :property -incremental {rating:0..n ""}
   }
 
   #
@@ -53,16 +52,30 @@ namespace eval bi {
   #
   proc navigation-bar {} {
     return {
+      <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+		  <div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+			  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <a class="navbar-brand" href="#">WU ScalableSystems Engineering</a>
+			</div>
 
-      <a href='biindex.adp'>list</a> &sdot;
-      <a href='biedit.adp'>edit</a> &sdot;
-    }
-  }
-
-  proc footer {} {
-    return {
-      <a href='mongo-insert1.tcl'>insert first</a> &sdot;
-      <a href='mongo-drop.tcl'>drop all</a> &sdot;
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="menu">
+			  <ul class="nav navbar-nav">
+				<li><a href='mongo-list.adp'>List</a></li>
+    			<li><a href='mongo-edit.adp'>Edit</a></li>
+				<li><a href='mongo-insert1.tcl'>Insert First</a></li>
+				<li><a href='mongo-drop.tcl'>Drop All</a></li>
+			  </ul>
+			</div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
     }
   }
 
@@ -83,7 +96,9 @@ namespace eval bi {
   #
 
   ns_log notice [Posting template set {
-    @:ts@: <b>@:author@</b> posts: <em>@:title@</em><em>@:text@</em> <br>
+    @:ts@:  <h4>@:title@</h4> <br>
+	<h5>@:description@</h5> <br>
+	<b>@:author@</b> <br>
     <ul><FOREACH var='c' in=':comments' type='list'><li>@c;obj@</li>
     </FOREACH></ul>
     tags: @:tags@<br>
@@ -97,20 +112,22 @@ namespace eval bi {
   #
   # edit templates
   #
-
+    
   proc add-field {what {context ""}} {
     #puts stderr "add-field $what $context"
-    return [subst {<a title="add $what"
+    return [subst {<a title="add $what" 
       href='mongo-new.tcl?__what=$what&__id=@::_id@&__context=$context'>\[+\]</a>}]
   }
 
   Posting template set -name edit [subst {
+	@:ts@:  <h4>@:title@</h4> <br>
+	<h5>@:description@</h5> <br>
+	<b>@:author@</b> <br>
     <% set ::_id \[set :_id\] %>
-    @:ts@: <b>@:author@</b> posts: <em>@:title@</em> [add-field comment]<br>
+    [add-field comment]<br>
     <ul><FOREACH var='c' in=':comments' type='list'><li>@c;obj;edit@</li>
     </FOREACH></ul>
     tags: @:tags@ [add-field tag]<br>
-    rating: @:rating@ [add-field rating]<br>
   }]
 
   Comment template set -name edit [subst {

@@ -39,8 +39,9 @@ namespace eval ::qa {
             </div>
             <!-- List group -->
             <ul class="list-group">
-              <a href="#" class="list-group-item">Postings <span class="badge"><%= [expr {[::nx::var exists $p postings] ? [ns_quotehtml [get_value2 p postings]] : {0}}]%></span></a>
-              <a href="#" class="list-group-item">Comments <span class="badge"><%= [expr {[::nx::var exists $p comments] ? [ns_quotehtml [get_value2 p postings]] : {0}}]%></span></a>
+              <a href="#" class="list-group-item">Questions <span class="badge"><%= [expr {[::nx::var exists $p postings] ? [ns_quotehtml [get_value2 p postings]] : {0}}]%></span></a>
+              <a href="#" class="list-group-item">Comments <span class="badge"><%= [expr {[::nx::var exists $p comments] ? [ns_quotehtml [get_value2 p comments]] : {0}}]%></span></a>
+              <a href="#" class="list-group-item">New Question</a>
             </ul>
           </div>
         </FOREACH>

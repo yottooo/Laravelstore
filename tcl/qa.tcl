@@ -118,7 +118,8 @@ namespace eval qa {
         <h4>@:description@</h4>
         <small class="text-muted"><b>@:author@</b> @:ts@</small>
         <hr>
-        <FOREACH var='c' in=':comments' type='list'>@c;obj@
+        <FOREACH var='c' in=':comments' type='list'>
+          @c;obj@
         </FOREACH><br/>
     </div>
   </div>
@@ -153,7 +154,7 @@ namespace eval qa {
   proc add-field {what {context ""}} {
     #puts stderr "add-field $what $context"
     return [subst {<a title="add $what"
-      href='mongo-new.tcl?__what=$what&__id=@::_id@&__context=$context'>$what</a>}]
+      class="editEntry" what='$what' id='@::_id@' context='$context'>$what</a>}]
   }
 
   # [add-field tag]
@@ -162,7 +163,10 @@ namespace eval qa {
     <!-- Default panel contents -->
       <div class="panel-body">
         <% set ::_id \[set :_id\] %>
-        <h3> @:title@ </h3><span class="label label-primary"> @:tags@ </span>
+        <h3> @:title@ </h3>
+        <FOREACH var='t' in=':tags' type='list'>
+            <span class="label label-primary">@t@</span>
+        </FOREACH>
         <h4>@:description@</h4>
         <small class="text-muted"><b>@:author@</b> @:ts@</small>
         <hr>

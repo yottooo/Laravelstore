@@ -29,7 +29,7 @@ namespace eval ::qa {
       <div id="sidecanvas" >
         <div class="col-12 sidebar-offcanvas" id="sidebar">
         <FOREACH var='p' in=':posting' type='list'>
-          @p;obj@
+          @p;obj;edit@
         </FOREACH>
         </div>
       </div>
