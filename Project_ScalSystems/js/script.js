@@ -1,7 +1,8 @@
 $(document).ready(function(){
 
+    checkCookie();
     loadContent();
-    callPage("sidecanvas/login.html");
+    //callPage("sidecanvas/login.html");
 
     $('a').on('click', function(e){
      e.preventDefault( );
@@ -23,7 +24,8 @@ $(document).ready(function(){
      type: "GET",
      dataType : 'text',
      success: function( response ){
-       $('#content').html(response);
+       $('#edit').html(response);
+       $('#content').html("");
 
        console.log('the page was loaded', response);
      },
@@ -38,14 +40,12 @@ $(document).ready(function(){
    });
  });
 
-  $('body').on('click','.editEntry', function(e){
+  $('#edit').on('click','.editEntry', function(e){
    e.preventDefault( );
    var PostingID = $(this).attr('id');
    var what = $(this).attr('what');
    var context = $(this).attr('context');
    var user = $("#sidecanvas h3").val();
-
-   console.log(PostingID +" "+ what +" "+ context+" "+user);
 
    $.ajax({
      url: 'tcl/edit_posting.tcl?__id='+PostingID+'&__what='+what+'&__context='+context,
@@ -78,6 +78,7 @@ $(document).ready(function(){
               data: $("#entry").serialize()+"&author="+username, // serializes the form's elements.
               success: function(data)
               {    console.log(data)
+                   $('#content').html("");
                    loadContent(); // show response from the php script.
               },error: function( error ){
                   console.log(error)
@@ -95,26 +96,8 @@ $(document).ready(function(){
   $('body').on('click','.rate', function(e){
    e.preventDefault( );
    var PostingID = $(this).attr('id');
-   changeRating(PostingID)
+   changeRating(PostingID);
  });
-
-   $.ajax({
-     url: 'tcl/content.tcl',
-     type: "GET",
-     dataType : 'text',
-     success: function( response ){
-       $('#content').html(response);
-       console.log('the page was loaded', response);
-     },
-     error: function( error ){
-         $('#content').html('The page was NOT loaded');
-         console.log('the page was NOT loaded', error);
-     },
-
-     complete: function( xhr, status ) {
-       console.log('The request is complete!');
-     }
-   });
 
    function changeRating(id){
      $.ajax({
@@ -158,7 +141,9 @@ $(document).ready(function(){
           url: 'tcl/loadPosting.tcl?id='+id,
           type: "GET",
           success: function( response ){
-            $('#content').html(response);
+            $('#edit').html(response);
+            $('#content').html("");
+
             console.log('the page was loaded', response);
           },
           error: function( error ){
@@ -171,6 +156,10 @@ $(document).ready(function(){
           }
         });
     };
+
+    $("#sidecanvas").on('click',"#logout",function() {
+       logoutUser();
+    });
 });
 
 function loadContent(){
@@ -179,7 +168,8 @@ function loadContent(){
      type: "GET",
      dataType : 'text',
      success: function( response ){
-       $('#content').html(response);
+       $('#edit').html(response);
+       $('#content').html("");
        console.log('the page was loaded', response);
      },
      error: function( error ){
@@ -192,6 +182,59 @@ function loadContent(){
      }
    });
  }
+
+ function checkCookie(){
+    $.ajax({
+      url: 'tcl/checkCookie.tcl',
+      type: "GET",
+      dataType : 'text',
+      success: function( response ){
+        var user = $("#sidecanvas h3").val();
+        $.ajax({
+               type: "GET",
+               url: "tcl/userLoggedIn.tcl",
+               success: function(data)
+               {
+                    $('#sidecanvas').html(data); // show response from the php script.
+                    loadContent();
+               },
+               error: function( error ){
+
+                   console.log('the page was NOT loaded', error);
+               },
+               complete: function( xhr, status ) {
+                 console.log('The request is complete!');
+               }
+             });
+      },
+      error: function( error ){
+          callPage("sidecanvas/login.html");
+          console.log('the page was NOT loaded', error);
+      },
+      complete: function( xhr, status ) {
+        console.log('The request is complete!');
+      }
+    });
+  }
+
+function logoutUser(){
+  $.ajax({
+         type: "GET",
+         url: "tcl/logoutUser.tcl",
+         success: function(data)
+         {
+              location.reload();
+         },
+         error: function( error ){
+
+             console.log('the page was NOT loaded', error);
+         },
+         complete: function( xhr, status ) {
+           console.log('The request is complete!');
+         }
+       });
+}
+
 
  function callPage(pageRefInput){
      $.ajax({

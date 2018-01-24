@@ -18,14 +18,11 @@ namespace eval ::qa {
     # which is a list of objects
     #
     set result [nx::Object new {
-      set userName [ns_queryget username]
-      set pwd [ns_queryget password]
+      set userName [ns_getcookie username ""]
 
-      set :user [User find all -cond [list username = $userName password = $pwd] ]
+      set :user [User find all -cond [list username = $userName] ]
       if {${:user} eq ""} {
         ns_returnerror 404 ""
-      } else {
-        ns_setcookie username $userName
       }
     }]
 

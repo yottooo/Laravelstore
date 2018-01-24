@@ -36,7 +36,7 @@ namespace eval ::qa {
                 <h3>@p;title@</h3>
                 <p style="overflow:hidden;height: 100px;word-wrap:break-word;">@p;description@</p>
                 <p><span class="label label-primary">@p;tags@</span></p>
-                <p><%= [expr [join [ns_quotehtml [get_value2 p rating]]  +]]%></p>
+                <p><%= [expr [join [ns_quotehtml [get_value2 p votes]]  +]]%></p>
                 <h4> Votes: 0  Answers: 0 </h4>
                 <a class="Posting" id='@p._id@'>See Content</a>
               </div>
