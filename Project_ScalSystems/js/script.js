@@ -13,6 +13,76 @@ $(document).ready(function(){
     loadPosting(PostingID)
   });
 
+  $('body').on('click','.editEntry', function(e){
+   e.preventDefault( );
+   var PostingID = $(this).attr('id');
+   var what = $(this).attr('what');
+   var context = $(this).attr('context');
+   console.log(PostingID +" "+ what +" "+ context);
+
+   $.ajax({
+     url: 'tcl/edit_posting.tcl?__id='+PostingID+'&__what='+what+'&__context='+context,
+     type: "GET",
+     dataType : 'text',
+     success: function( response ){
+       $('#content').html(response);
+       console.log('the page was loaded', response);
+     },
+     error: function( error ){
+         $('#content').html('The page was NOT loaded');
+         console.log('the page was NOT loaded', error);
+     },
+
+     complete: function( xhr, status ) {
+       console.log('The request is complete!');
+     }
+   });
+ });
+
+ loadContent();
+
+ function loadContent(){
+    $.ajax({
+      url: 'tcl/content.tcl',
+      type: "GET",
+      dataType : 'text',
+      success: function( response ){
+        $('#content').html(response);
+        console.log('the page was loaded', response);
+      },
+      error: function( error ){
+          $('#content').html('The page was NOT loaded');
+          console.log('the page was NOT loaded', error);
+      },
+
+      complete: function( xhr, status ) {
+        console.log('The request is complete!');
+      }
+    });
+  }
+
+    // this is the id of the form
+    $("#content").submit('#entry',function(e) {
+        console.log($("#entry").serialize());
+       $.ajax({
+              type: "POST",
+              url: "tcl/edit_posting.tcl",
+              data: $("#entry").serialize(), // serializes the form's elements.
+              success: function(data)
+              {    console.log(data)
+                   loadContent(); // show response from the php script.
+              },error: function( error ){
+                  console.log(error)
+                  console.log('the page was NOT loaded', error);
+              },
+
+              complete: function( xhr, status ) {
+                console.log('The request is complete!');
+              }
+            });
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
+
   //When you click the button
   $('body').on('click','.rate', function(e){
    e.preventDefault( );

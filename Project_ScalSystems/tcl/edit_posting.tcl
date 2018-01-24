@@ -37,7 +37,7 @@ namespace eval ::qa {
     }
     ns_return 200 text/html [subst {
       $::style
-      <form method='post' action='mongo-new.tcl'>
+      <form id='entry'>
       Adding $what to posting: <em>[$p cget -title]</em><br>
       <input type='hidden' name='__id' value='$id'>
       <input type='hidden' name='__what' value='$what'>
@@ -75,7 +75,7 @@ namespace eval ::qa {
       if {$action eq ""} {
 	ns_return 200 text/html [subst {
 	  $::style
-	  <form method='post' action='mongo-new.tcl'>
+	  <form id='entry' >
 	  <input type='hidden' name='__what' value='$what'>
 	  <input type='hidden' name='__action' value='validate'>
 	  <span class='label'>Author:</span> <input type='text' name='author' size="40" required> <br>
@@ -147,4 +147,4 @@ namespace eval ::qa {
 
 }
 
-ns_returnredirect index.html
+ns_return 200 text/html "Okay"
