@@ -108,7 +108,7 @@ namespace eval ::qa {
        -tag [ns_queryget tag] \
 		   -ts [clock format [clock seconds] -format "%d-%b-%y %H:%M"]]
   set u [User find first -cond [list username = [ns_queryget author]]]
-  $u postings add $p End
+  $u postings add $p end
   $u save
 	$p save
       }
