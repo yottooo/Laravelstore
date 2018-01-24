@@ -34,6 +34,7 @@ namespace eval qa {
   nx::mongo::Class create Comment {
     :property author:required
     :property comment:required
+    :property -incremental votes:embedded,type=::qa::Vote,0..n
     :property -incremental replies:embedded,type=::qa::Comment,0..n
   }
 
@@ -45,7 +46,17 @@ namespace eval qa {
     :property ts:required
     :property -incremental comments:embedded,type=::qa::Comment,0..n
     :property -incremental {tags:0..n ""}
-    :property -incremental {rating:0..n 0}
+    :property -incremental votes:embedded,type=::qa::Vote,0..n
+  }
+
+  nx::mongo::Class create Vote {
+    :property username:required
+    :property vote:double,required
+  }
+
+  nx::mongo::Class create Session {
+    :property sessionid:required
+    :property username:required
   }
 
   nx::mongo::Class create User {

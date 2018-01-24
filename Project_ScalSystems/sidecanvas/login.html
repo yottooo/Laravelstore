@@ -1,18 +1,22 @@
 <div class="col-6 col-md-3 sidebar-offcanvas" id="sidebar">
               <div class="well well-lg" >
-              <form action="/action_page.php">
+              <p><b> You are not logged in!</b></p>
+              <p> Login if you want to post new Questions!</p>
+              <form id="formLogin">
                <div class="form-group">
-                 <label for="email">Email address:</label>
-                 <input type="email" class="form-control" id="email">
+                 <label for="user">Username:</label>
+                 <input type="text" name="username" class="form-control" id="user">
                </div>
                <div class="form-group">
-                 <label for="pwd">Password:</label>
-                 <input type="password" class="form-control" id="pwd">
+                 <label for="password">Password:</label>
+                 <input type="password" class="form-control" id="password" name="password">
                </div>
                <div class="checkbox">
-                 <label><input type="checkbox"> Remember me</label>
+                 <label><input type="checkbox"> Remember me></label>
                </div>
-               <button type="submit" class="btn btn-default">Submit</button>
+               <button type="submit" class="btn btn-default">Login</button>
             </form>
+            <br/>
+            <a id="openRegisterUser">Click here to register!</a>
             </div><!--/span-->
 </div>

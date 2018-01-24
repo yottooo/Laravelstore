@@ -20,14 +20,17 @@ namespace eval ::qa {
     set result [nx::Object new {
       set userName [ns_queryget username]
       set pwd [ns_queryget password]
-      puts $userName
+      
       set :user [User find all -cond [list username = $userName password = $pwd] ]
       if {${:user} eq ""} {
         ns_returnerror 404 ""
+      } else {
+
       }
     }]
+
     #
-    # Set template for result, iterating over the postings with FOREACH
+    # Template for displaying user information (Username, Postings, Comments and a link for creating new Questions)
     #
     $result template set {
       <div id="sidecanvas" >
@@ -35,13 +38,13 @@ namespace eval ::qa {
         <FOREACH var='p' in=':user' type='list'>
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3>@p;username@</h3>
+              <h3 id="currentUser" >@p;username@</h3>
             </div>
             <!-- List group -->
             <ul class="list-group">
               <a href="#" class="list-group-item">Questions <span class="badge"><%= [expr {[::nx::var exists $p postings] ? [ns_quotehtml [get_value2 p postings]] : {0}}]%></span></a>
               <a href="#" class="list-group-item">Comments <span class="badge"><%= [expr {[::nx::var exists $p comments] ? [ns_quotehtml [get_value2 p comments]] : {0}}]%></span></a>
-              <a href="#" class="list-group-item">New Question</a>
+              <a id="newQuestion" class="list-group-item">New Question</a>
             </ul>
           </div>
         </FOREACH>

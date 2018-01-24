@@ -5,6 +5,8 @@
 #
 namespace eval ::qa {
   set userName [ns_queryget username]
+  set search [User find all -cond [list username = $userName] ]
+  puts $userName
 
   if {[User find all -cond [list username = $userName] ] eq "" } {
     set p [User new \
