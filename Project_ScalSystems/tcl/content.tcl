@@ -30,13 +30,18 @@ namespace eval ::qa {
         <div class='row'>
           <FOREACH var='p' in=':postings' type='list'>
             <div class='col-6 col-lg-4'>
-                <h2>@p;title@</h2>
-                <p>@p;description@</p>
+            <div class="panel panel-default">
+              <!-- Default panel contents -->
+                <div class="panel-body " style="height: 300px;">
+                <h3>@p;title@</h3>
+                <p style="overflow:hidden;height: 100px;word-wrap:break-word;">@p;description@</p>
                 <p><span class="label label-primary">@p;tags@</span></p>
-                <p>Rating:<button class="rate" id='@p._id@'>+1</button>
-                <%= [expr [join [ns_quotehtml [get_value2 p rating]]  +]]%></p>
+                <p><%= [expr [join [ns_quotehtml [get_value2 p rating]]  +]]%></p>
+                <h4> Votes: 0  Answers: 0 </h4>
                 <a class="Posting" id='@p._id@'>See Content</a>
-            </div><!--/span-->
+              </div>
+              </div>
+            </div>
           </FOREACH>
         </div>
     }

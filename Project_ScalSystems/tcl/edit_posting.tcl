@@ -17,13 +17,7 @@
 namespace eval ::qa {
 
   set ::style {
-    <style> .label {
-      float: left;
-      text-align: right;
-      display: block;
-      width: 7em;
-    }</style>
-  }
+      }
 
 
   #
@@ -33,19 +27,31 @@ namespace eval ::qa {
     if {$id eq ""} {ns_returnerror 400 "id missing"}
     set p [Posting find first -cond [list _id = $id]]
     foreach {label field size} $fields {
-      append entries "<span class='label'>$label:</span> <input type='text' name='$field' size='$size' required> <br>\n"
+      append entries "<b>$label:</b> <input type='text' name='$field' size='$size' required> <br><br>\n"
     }
     ns_return 200 text/html [subst {
       $::style
-      <form id='entry'>
-      Adding $what to posting: <em>[$p cget -title]</em><br>
-      <input type='hidden' name='__id' value='$id'>
-      <input type='hidden' name='__what' value='$what'>
-      <input type='hidden' name='__action' value='validate'>
-      <input type='hidden' name='__context' value='$context'>
-      $entries
-      <input type='submit'>
-      </form>
+      <div id="inputEntry" class="container">
+      <h2> Adding $what to posting: </h2>
+      <div class="panel panel-default">
+        <!-- Default panel contents -->
+          <div class="panel-body">
+
+            <form id='entry'>
+            <h2><em>[$p cget -title]</em><br></h2>
+            <br>
+
+            <input type='hidden' name='__id' value='$id'>
+            <input type='hidden' name='__what' value='$what'>
+            <input type='hidden' name='__action' value='validate'>
+            <input type='hidden' name='__context' value='$context'>
+            $entries
+            <br>
+            <input type='submit' id ='submitEntry'>
+            </form>
+          </div>
+        </div>
+      </div>
     }]
   }
 
@@ -75,15 +81,24 @@ namespace eval ::qa {
       if {$action eq ""} {
 	ns_return 200 text/html [subst {
 	  $::style
-	  <form id='entry' >
-	  <input type='hidden' name='__what' value='$what'>
-	  <input type='hidden' name='__action' value='validate'>
-	  <span class='label'>Author:</span> <input type='text' name='author' size="40" required> <br>
-	  <span class='label'>Title:</span> <input type='text' name='title' size="80" required> <br>
-    <span class='label'>Description:</span> <input type='text' name='description' size="80" required> <br>
-    <span class='label'>Tags:</span> <input type='text' name='tag' size="80" required> <br>
-	  <input type='submit'>
-	  </form>
+    <div class="container">
+    <h2> Adding new Question: </h2>
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+        <div class="panel-body">
+    	  <form id='entry'>
+    	  <input type='hidden' name='__what' value='$what'>
+    	  <input type='hidden' name='__action' value='validate'>
+    	  Tags: <input type='text' name='tag' size="60" required> <br>
+    	  Title: <input type='text' name='title' size="60" required><br><br>
+        <p style="vertical-align: middle;">
+        Description: <textarea name='description' style="height:200px; width:600px;resize:none" required></textarea> <br>
+        </p>
+    	  <input type='submit'>
+	      </form>
+    </div>
+  </div>
+</div>
 	}]
       } else {
 	set p [Posting new \
@@ -92,6 +107,9 @@ namespace eval ::qa {
        -description [ns_queryget description] \
        -tag [ns_queryget tag] \
 		   -ts [clock format [clock seconds] -format "%d-%b-%y %H:%M"]]
+  set u [User find first -cond [list username = [ns_queryget author]]]
+  $u postings add $p End
+  $u save
 	$p save
       }
     }
@@ -112,7 +130,7 @@ namespace eval ::qa {
       if {$action eq ""} {
 	if {$id eq ""} {ns_returnerror 400 "id missing"}
 	set p [Posting find first -cond [list _id = $id]]
-	posting-form $id $what [list Author author 40 Comment comment 80]
+	posting-form $id $what [list Comment comment 80]
       } else {
 	set p [Posting find first -cond [list _id = $id]]
 	$p comments add [Comment new \
@@ -127,7 +145,7 @@ namespace eval ::qa {
 	if {$id eq ""} {ns_returnerror 400 "id missing"}
 	set p [Posting find first -cond [list _id = $id]]
 	posting-form $id $what \
-	    [list Author author 40 Reply reply 80] \
+	    [list Reply reply 80] \
 	    [ns_queryget __context]
       } else {
 	set p [Posting find first -cond [list _id = $id]]

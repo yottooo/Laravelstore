@@ -1,5 +1,4 @@
 $(document).ready(function(){
-$(".registerUser").hide();
   var dialog, form,
 
   // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
@@ -63,25 +62,8 @@ function checkRegexp( o, regexp, n ) {
   }
 
    // this is the id of the form
-   $("#formLogin").submit(function(e) {
-      console.log("Submit stuff");
-
-      $.ajax({
-             type: "POST",
-             url: "tcl/user.tcl",
-             data: $("#formLogin").serialize(), // serializes the form's elements.
-             success: function(data)
-             {    console.log(data)
-                  $('#sidecanvas').html(data); // show response from the php script.
-             },error: function( error ){
-                 alert("Unable to login! Please check username and password!");
-                 console.log('the page was NOT loaded', error);
-             },
-
-             complete: function( xhr, status ) {
-               console.log('The request is complete!');
-             }
-           });
+   $("#sidecanvas").submit("#formLogin",function(e) {
+      loginUser($("#formLogin #user").val(),$("#formLogin #password").val())
 
        e.preventDefault(); // avoid to execute the actual submit of the form.
    });
@@ -95,23 +77,32 @@ function checkRegexp( o, regexp, n ) {
             success: function(data)
             {
                  $('#sidecanvas').html(data); // show response from the php script.
+                 loadContent();
+            },
+            error: function( error ){
+                //alert("Error! ");
+                console.log('the page was NOT loaded', error);
+            },
+            complete: function( xhr, status ) {
+              console.log('The request is complete!');
             }
           });
    }
 
 
    // this is the id of the form
-   $("#registerUser").submit('.registerUser',function(e) {
+   $("#content").submit('#formID',function(e) {
        $.ajax({
               type: "POST",
               url: "tcl/register.tcl",
               data: $("#formID").serialize(), // serializes the form's elements.
               success: function(data)
-              { console.log('the page was NOasdT loaded', data);
+              {
                   loginUser( $("#formID #username").val(), $("#formID #password").val());
+                  loadContent();
               },
               error: function( error ){
-                  alert("Error!")
+                  alert("Error!", error)
                   console.log('the page was NOT loaded', error);
               },
 
@@ -122,9 +113,8 @@ function checkRegexp( o, regexp, n ) {
        e.preventDefault(); // avoid to execute the actual submit of the form.
    });
 
-   $( "#openRegisterUser" ).button().click(function() {
-      $(".registerUser").show();
-      $('#content').html("");
+   $("#sidecanvas").on('click',"#openRegisterUser",function() {
+      callPage("register.html");
    });
    $("#dialogWrapper").hide();
 

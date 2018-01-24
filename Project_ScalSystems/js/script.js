@@ -1,9 +1,11 @@
 $(document).ready(function(){
 
+    loadContent();
+    callPage("sidecanvas/login.html");
+
     $('a').on('click', function(e){
      e.preventDefault( );
      var pageRef = $(this).attr('href');
-     console.log("hierss")
      callPage(pageRef)
    });
 
@@ -13,19 +15,16 @@ $(document).ready(function(){
     loadPosting(PostingID)
   });
 
-  $('body').on('click','.editEntry', function(e){
+  $('body').on('click','#newQuestion', function(e){
    e.preventDefault( );
-   var PostingID = $(this).attr('id');
-   var what = $(this).attr('what');
-   var context = $(this).attr('context');
-   console.log(PostingID +" "+ what +" "+ context);
 
    $.ajax({
-     url: 'tcl/edit_posting.tcl?__id='+PostingID+'&__what='+what+'&__context='+context,
+     url: 'tcl/edit_posting.tcl',
      type: "GET",
      dataType : 'text',
      success: function( response ){
        $('#content').html(response);
+
        console.log('the page was loaded', response);
      },
      error: function( error ){
@@ -39,35 +38,44 @@ $(document).ready(function(){
    });
  });
 
- loadContent();
+  $('body').on('click','.editEntry', function(e){
+   e.preventDefault( );
+   var PostingID = $(this).attr('id');
+   var what = $(this).attr('what');
+   var context = $(this).attr('context');
+   var user = $("#sidecanvas h3").val();
 
- function loadContent(){
-    $.ajax({
-      url: 'tcl/content.tcl',
-      type: "GET",
-      dataType : 'text',
-      success: function( response ){
-        $('#content').html(response);
-        console.log('the page was loaded', response);
-      },
-      error: function( error ){
-          $('#content').html('The page was NOT loaded');
-          console.log('the page was NOT loaded', error);
-      },
+   console.log(PostingID +" "+ what +" "+ context+" "+user);
 
-      complete: function( xhr, status ) {
-        console.log('The request is complete!');
-      }
-    });
-  }
+   $.ajax({
+     url: 'tcl/edit_posting.tcl?__id='+PostingID+'&__what='+what+'&__context='+context,
+     type: "GET",
+     dataType : 'text',
+     success: function( response ){
+       $('#edit').html(response);
+       $('#content').html("");
+       console.log('the page was loaded', response);
+     },
+     error: function( error ){
+         $('#content').html('The page was NOT loaded');
+         console.log('the page was NOT loaded', error);
+     },
+
+     complete: function( xhr, status ) {
+       console.log('The request is complete!');
+     }
+   });
+ });
+
+
 
     // this is the id of the form
-    $("#content").submit('#entry',function(e) {
-        console.log($("#entry").serialize());
+    $("#edit").submit('#entry',function(e) {
+        var username= $('#sidecanvas #currentUser').html();
        $.ajax({
               type: "POST",
               url: "tcl/edit_posting.tcl",
-              data: $("#entry").serialize(), // serializes the form's elements.
+              data: $("#entry").serialize()+"&author="+username, // serializes the form's elements.
               success: function(data)
               {    console.log(data)
                    loadContent(); // show response from the php script.
@@ -163,35 +171,55 @@ $(document).ready(function(){
           }
         });
     };
-
-
-    function callPage(pageRefInput){
-        $.ajax({
-          url: pageRefInput,
-          type: "GET",
-          dataType : 'text',
-          success: function( response ){
-            if(pageRefInput == 'sidecanvas/login.html'){
-              $('#sidecanvas').html(response);
-            } else if(pageRefInput == 'index.html') {
-              location.reload();
-            }else if (pageRefInput == str.startsWith('loadPosting')) {
-                  console.log("hh")
-                  var id = pageRefInput.replace('loadPosting?id=','')
-                  loadPosting(id)
-            } else {
-              $('.content').html(response);
-            }
-              console.log('the page was loaded', response);
-          },
-
-          error: function( error ){
-              console.log('the page was NOT loaded', error);
-          },
-
-          complete: function( xhr, status ) {
-            console.log('The request is complete!');
-          }
-        });
-    };
 });
+
+function loadContent(){
+   $.ajax({
+     url: 'tcl/content.tcl',
+     type: "GET",
+     dataType : 'text',
+     success: function( response ){
+       $('#content').html(response);
+       console.log('the page was loaded', response);
+     },
+     error: function( error ){
+         $('#content').html('The page was NOT loaded');
+         console.log('the page was NOT loaded', error);
+     },
+
+     complete: function( xhr, status ) {
+       console.log('The request is complete!');
+     }
+   });
+ }
+
+ function callPage(pageRefInput){
+     $.ajax({
+       url: pageRefInput,
+       type: "GET",
+       dataType : 'text',
+       success: function( response ){
+         if(pageRefInput == 'sidecanvas/login.html'){
+           $('#sidecanvas').html(response);
+         } else if(pageRefInput == 'index.html') {
+           location.reload();
+         }else if (pageRefInput.startsWith('loadPosting')) {
+               var id = pageRefInput.replace('loadPosting?id=','')
+               loadPosting(id)
+         } else if (pageRefInput == 'register.html') {
+               $('#content').html(response);
+         } else{
+
+         }
+           console.log('the page was loaded', response);
+       },
+
+       error: function( error ){
+           console.log('the page was NOT loaded', error);
+       },
+
+       complete: function( xhr, status ) {
+         console.log('The request is complete!');
+       }
+     });
+ };
